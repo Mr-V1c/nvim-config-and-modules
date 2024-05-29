@@ -5,28 +5,24 @@ return {
 		dependencies = { "nvim-lua/plenary.nvim" },
 		config = function()
 			local builtin = require("telescope.builtin")
+			local search_nvim_dir = function()
+				builtin.find_files({ cwd = "~/.config/nvim" })
+			end
 			vim.keymap.set("n", "<leader>sf", builtin.find_files, {})
 			vim.keymap.set("n", "<leader>sg", builtin.live_grep, {})
+			vim.keymap.set("n", "<leader>ss", builtin.grep_string, {})
 			vim.keymap.set("n", "<leader>sb", builtin.buffers, {})
 			vim.keymap.set("n", "<leader>sh", builtin.help_tags, {})
 			vim.keymap.set("n", "<leader><leader>", builtin.current_buffer_fuzzy_find, {})
-
---			vim.keymap.set("n", "<leader>n", builtin.dir, {})
+			vim.keymap.set("n", "<leader>n", search_nvim_dir, {})
 		end,
 	},
 	{
 		"nvim-telescope/telescope-ui-select.nvim",
 		config = function()
 			require("telescope").setup({
+				completion = { completeopt = "menu,menuone,preview,noselect" },
 
-				defaults = {
-					-- `hidden = true` is not supported in text grep commands.
-				},
-				pickers = {
-					find_files = {
-					 hidden = true--` will still show the inside of `.git/` as it's not `.gitignore`d.
-					},
-				},
 				extensions = {
 					["ui-select"] = {
 						require("telescope.themes").get_dropdown({
